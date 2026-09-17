@@ -1,0 +1,45 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PROJECT REBORN</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#07111F">
+<style>
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:linear-gradient(180deg,#050816,#0B1736);color:#fff}
+.wrap{max-width:760px;margin:auto;padding:18px}
+.card{background:rgba(15,33,62,.92);border:1px solid rgba(255,255,255,.08);border-radius:24px;padding:16px;margin:14px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.progress{height:10px;background:#223B66;border-radius:999px;overflow:hidden}
+.fill{height:100%;background:linear-gradient(90deg,#5AA9FF,#7ED7FF);width:0}
+.row{display:flex;justify-content:space-between;align-items:center}
+.task{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.task:last-child{border:none}
+button,input{font:inherit}
+button{width:100%;padding:12px;border:none;border-radius:14px;background:#5AA9FF;font-weight:700}
+input[type=number]{width:100%;padding:12px;border:none;border-radius:12px;background:#173055;color:#fff}
+.small{color:#9FB3D9}
+</style></head><body><div class="wrap">
+<h1>PROJECT REBORN</h1><div class="small">김건호 Edition</div>
+<div class="card"><div class="row"><div><div class="small">친구 만나는 날까지</div><h2 id=dd>D-?</h2></div><div><div class="small">목표</div><h2>98.8kg</h2></div></div><div class="progress"><div id=fill class=fill></div></div></div>
+<div class="grid"><div class="card"><div class="small">현재</div><h2>105.3kg</h2></div><div class="card"><div class="small">체지방 목표</div><h2>-6.5kg</h2></div></div>
+<div class="card"><h3>오늘 체크</h3>
+<div class="task">💧 물 2.5L <input id=w type=checkbox></div>
+<div class="task">🍗 단백질 150g <input id=p type=checkbox></div>
+<div class="task">⚾ 캐치볼 <input id=c type=checkbox></div>
+<div class="task">🏋️ 운동 <input id=g type=checkbox></div>
+<div class="task">🦴 견갑골 루틴 <input id=s type=checkbox></div>
+<div class="task">😴 수면 <input id=sl type=checkbox></div></div>
+<div class="card"><h3>오늘 운동</h3><div id=plan></div></div>
+<div class="card"><h3>몸무게 기록</h3><input id=wt type=number step=0.1 placeholder="오늘 몸무게"><button onclick=saveW()>저장</button><div id=last class=small></div></div>
+<div class="card"><h3>오늘의 문장</h3><div id=q>"오늘 하나만 더 하면 된다."</div></div>
+</div>
+<script>
+const target=new Date("2026-10-10"),start=new Date("2026-09-17"),now=new Date();
+const diff=Math.ceil((target-now)/86400000);dd.textContent=diff>=0?`D-${diff}`:"DONE";
+const total=(target-start)/86400000,done=Math.max(0,Math.min(total,(now-start)/86400000));fill.style.width=(done/total*100)+"%";
+const plans={0:"💪 전신 + 경사걷기",1:"🏌️ 골프 + 체스트프레스",2:"🏋️ 등·이두",3:"🏠 홈트",4:"🧗 클라이밍 + 골프",5:"🏸 배드민턴 + 회복",6:"🚶 걷기 + 버피"};plan.textContent=plans[now.getDay()];
+const quotes=["오늘 하나만 더 하면 된다.","어제보다 1%만.","10월의 내가 11월의 나를 만든다.","버피 40개가 자신감을 만든다.","포기하는 건 10초, 변화는 몇 주."];q.textContent=quotes[now.getDate()%quotes.length];
+["w","p","c","g","s","sl"].forEach(id=>{const e=document.getElementById(id);e.checked=localStorage.getItem(id)==="1";e.onchange=()=>localStorage.setItem(id,e.checked?"1":"0")});
+last.textContent=localStorage.getItem("weight")?`최근 기록: ${localStorage.getItem("weight")}kg`:"";
+function saveW(){if(!wt.value)return;localStorage.setItem("weight",wt.value);last.textContent=`최근 기록: ${wt.value}kg`;wt.value="";}
+if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js");}
+</script></body></html>
